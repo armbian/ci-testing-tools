@@ -71,8 +71,9 @@ get_build_target() {
 }
 
 build_kernel() {
+  local build_config=$1
   git checkout ${GIT_COMMIT}
-  ./compile.sh CONFIG=../ci-testing-tools/config-jenkins-kernel.conf BOARD=${ARMBIAN_BOARD} BRANCH=${ARMBIAN_BRANCH}
+  ./compile.sh CONFIG=${build_config} BOARD=${ARMBIAN_BOARD} BRANCH=${ARMBIAN_BRANCH}
 
 }
 

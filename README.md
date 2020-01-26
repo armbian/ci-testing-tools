@@ -34,8 +34,8 @@ build_kernel jenkins-kernel
 * armbian/build
 
 ## jenkins plugins
-https://plugins.jenkins.io/github-pullrequest
-https://plugins.jenkins.io/multiple-scms
-https://plugins.jenkins.io/pipeline-githubnotify-step
-https://plugins.jenkins.io/pipeline-github
+* https://plugins.jenkins.io/github-pullrequest
+* https://plugins.jenkins.io/multiple-scms
+* https://plugins.jenkins.io/pipeline-githubnotify-step
+* https://plugins.jenkins.io/pipeline-github
 

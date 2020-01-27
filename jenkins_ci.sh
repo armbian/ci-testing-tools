@@ -66,8 +66,8 @@ done
 
 get_files_changed() {
   ## these var values needed by detectGitChanges.sh  
- # GIT_COMMIT=${GITHUB_PR_HEAD_SHA}
- # GIT_PREVIOUS_COMMIT=HEAD
+  echo "GIT_COMMIT=${GITHUB_PR_HEAD_SHA}"
+  echo "GIT_PREVIOUS_COMMIT=HEAD"
   
   family_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../family.watch)"
   board_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../board.watch)"

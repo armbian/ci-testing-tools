@@ -39,3 +39,9 @@ build_kernel jenkins-kernel
 * https://plugins.jenkins.io/pipeline-githubnotify-step
 * https://plugins.jenkins.io/pipeline-github
 
+
+## notes
+### get matches from old builds
+```
+for log in */builds/*/log;do fgrep family_row $log|fgrep changed;done|uniq|awk  '{print $2}'
+```

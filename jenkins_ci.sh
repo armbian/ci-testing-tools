@@ -1,5 +1,23 @@
 #!/bin/bash
 
+SHOW_INFO=1
+SHOW_ERROR=1
+
+## utility functions
+
+# use this function for info output
+_info()
+{
+        [ $SHOW_INFO -eq 1 ] && echo "INFO: ${@}"
+}
+
+# use this function for error output ex: _error
+_error()
+{
+        [ $SHOW_ERROR -eq 1 ] && echo "ERROR: ${@}"
+}
+
+
 configure_monorepo_watcher() {
   echo "config/kernel" > family.watch
   echo "config/sources" >> family.watch
@@ -46,22 +64,24 @@ translate_family() {
   echo "${common_family}"
 }
 
-generate_test_table() {  
+generate_board_table() {  
   config_dir=build/config/boards
   files=$(ls ${config_dir}/*.conf ${config_dir}/*.wip ${config_dir}/*.csc)
   
-  rm -f test_table.csv
+  rm -f board_table.csv
   
   for file in ${files}; do
     source ${file}
     board=$(basename ${file}|cut -d '.' -f1)
     support_level=$(basename ${file}|cut -d'.' -f2)
     common_family=$(translate_family ${BOARDFAMILY})
-    echo "${BOARDFAMILY},${common_family},${BOARD_NAME},${board},${support_level}" >> test_table.csv
+    echo "${BOARDFAMILY},${common_family},${BOARD_NAME},${board},${support_level}" >> board_table.csv
 done
+}
 
-
-
+load_board_table() {
+#BOARD_TABLE=$(cat ../board_table.csv|sort -r)
+readarray BOARD_TABLE < ../board_table.csv
 }
 
 get_files_changed() {
@@ -75,36 +95,39 @@ get_files_changed() {
 }
 
 get_build_target() {
-  OLDIFS=${IFS}
-  IFS=$'\n'
-  
+  local current_score=0
+  local board_score=0
   # reverse sort improves grep accuracy
-  for row in $(cat ../test_table.csv|sort -r); do
-    
+  IFS=$'\n'
+  for row in ${BOARD_TABLE[@]}; do
+    _info "board row ${row[@]}" 
     family=$(echo $row|cut -d',' -f1)
     board=$(echo $row|cut -d',' -f4)
     for family_row in ${family_changed}; do
-      echo "family_row: ${family_row}"
-      if echo $family_row | fgrep -q $family; then
+      current_score=$(echo $family_row | fgrep -o -e ${family} -e $(translate_family ${family})|wc -c)
+      _info "score: ${current_score} | family_row: ${family_row}"
+      if [[ $current_score -gt $board_score ]]; then
+         board_score=$current_score
          ARMBIAN_BOARD=${board}
+         _info "ARMBIAN_BOARD=${board}"
          for branch in current dev legacy; do
            if echo $family_row |fgrep -q $branch; then
-              echo "ARMBIAN_BRANCH=${branch}"
+              _info "ARMBIAN_BRANCH=${branch}"
               ARMBIAN_BRANCH=${branch}
            fi
          done
-         break 2
+        # break 2
       fi
     done
     for board_row in ${board_changed}; do  
       if echo $board_row | fgrep -q $board; then
         ARMBIAN_BOARD=${board}
+        _info "ARMBIAN_BOARD=${board}"
         break
       fi
     done
   
   done
-  IFS=${OLDIFS}
 }
 
 build_kernel() {

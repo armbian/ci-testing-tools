@@ -120,10 +120,12 @@ get_build_target() {
       fi
     done
     for board_row in ${board_changed}; do  
-      if echo $board_row | fgrep -q $board; then
+      current_score=$(echo $board_row | fgrep -o ${board}|wc -c)
+      _info "score: ${current_score} | board_row: ${board_row}"
+      board_score=$current_score
+      if [[ $current_score -gt $board_score ]]; then
         ARMBIAN_BOARD=${board}
         _info "ARMBIAN_BOARD=${board}"
-        break
       fi
     done
   

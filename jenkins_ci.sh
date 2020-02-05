@@ -81,7 +81,7 @@ done
 
 load_board_table() {
 #BOARD_TABLE=$(cat ../board_table.csv|sort -r)
-readarray BOARD_TABLE < ../board_table.csv
+readarray BOARD_TABLE < board_table.csv
 }
 
 get_files_changed() {

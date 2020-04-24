@@ -141,5 +141,5 @@ build_kernel() {
 
 build_image() {
   local build_config=${1}
-  ./compile.sh ${build_config} BOARD=${ARMBIAN_BOARD} BRANCH=${ARMBIAN_BRANCH} RELEASE=${ARMBIAN_RELEASE}
+  ./compile.sh ${build_config} BOARD=${ARMBIAN_BOARD} BRANCH=${ARMBIAN_BRANCH} RELEASE=${ARMBIAN_RELEASE} BUILD_DESKTOP=${ARMBIAN_BUILD_DESKTOP}
 }

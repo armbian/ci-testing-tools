@@ -132,6 +132,16 @@ get_build_target() {
   done
 }
 
+## ex: get_families_with_kernel_branch linux-5.6.y
+get_families_with_kernel_branch() {
+  local kernel_branch=${1}
+
+  for match in $(grep -R BRANCH config/* | grep ${kernel_branch} | grep families |awk '{print $1}' |tr -d ':'); do
+    basename $match | awk -F[_\.] '{print $1}'
+  done
+
+}
+
 build_kernel() {
   local build_config=${1}
   git checkout ${GIT_COMMIT}

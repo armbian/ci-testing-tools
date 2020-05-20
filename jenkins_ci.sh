@@ -144,7 +144,6 @@ get_families_with_kernel_branch() {
 
 build_kernel() {
   local build_config=${1}
-  git checkout ${GIT_COMMIT}
   ./compile.sh ${build_config} BOARD=${ARMBIAN_BOARD} BRANCH=${ARMBIAN_BRANCH}
 
 }

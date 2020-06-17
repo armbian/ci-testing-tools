@@ -86,8 +86,8 @@ readarray BOARD_TABLE < board_table.csv
 
 get_files_changed() {
   ## these var values needed by detectGitChanges.sh  
-  echo "GIT_COMMIT=${GITHUB_PR_HEAD_SHA}"
-  echo "GIT_PREVIOUS_COMMIT=HEAD"
+  echo "GIT_COMMIT=${GIT_COMMIT}"
+  echo "GIT_PREVIOUS_COMMIT=${GIT_PREVIOUS_COMMIT}"
   
   family_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../family.watch)"
   board_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../board.watch)"

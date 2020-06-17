@@ -115,8 +115,8 @@ get_files_changed() {
 }
 
 get_build_target() {
-  local current_score=0
-  local board_score=0
+  current_score=0
+  board_score=0
   # reverse sort improves grep accuracy
   IFS=$'\n'
   for row in ${BOARD_TABLE[@]}; do

@@ -150,6 +150,7 @@ get_build_target() {
     done
   
   done
+  _info "${ARMBIAN_BOARD} ${ARMBIAN_BRANCH} selected"
 }
 
 ## ex: get_families_with_kernel_branch linux-5.6.y

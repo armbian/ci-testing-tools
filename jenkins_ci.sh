@@ -84,13 +84,33 @@ load_board_table() {
 readarray BOARD_TABLE < board_table.csv
 }
 
+##adopted from https://github.com/slimm609/monorepo-gitwatcher
+detect_git_changes() {
+  local watch_files=${1}
+  
+  oldIFS=${IFS}
+  IFS=$'\r\n' GLOBIGNORE='*' command eval 'IGNORE_FILES=($(cat $watch_files))'
+  IFS=${oldIFS}
+  folders=$(git diff --name-only ${GIT_COMMIT} ${GIT_PREVIOUS_COMMIT} | sort -u | uniq)
+  changed_components=${folders}
+
+  for component in ${changed_components}; do
+    for file in ${IGNORE_FILES[@]}; do
+      if echo ${component} | grep -q ${file}; then
+        echo "${component} has changed"
+      fi
+    done
+  done
+
+}
+
 get_files_changed() {
   ## these var values needed by detectGitChanges.sh  
   echo "GIT_COMMIT=${GIT_COMMIT}"
   echo "GIT_PREVIOUS_COMMIT=${GIT_PREVIOUS_COMMIT}"
   
-  family_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../family.watch)"
-  board_changed="$(../monorepo-gitwatcher/detectGitChanges.sh ../board.watch)"
+  family_changed="$(detect_git_changes ../family.watch)"
+  board_changed="$(detect_git_changes ../board.watch)"
   
 }
 

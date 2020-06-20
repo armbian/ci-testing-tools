@@ -1,35 +1,40 @@
 # ci-testing-tools
 scripts, tools, configs for CI-testing
 
-Currently just shell scripts called by jenkins.  May evolve into somethign more elegant such as a jenkins file.
+Currently just shell functions included by ~jenkins~ github actions.  
 
-Uses some simple logic for a best-effort attempt to compile a kernel based on what code has changed
+Uses some simple scoring logic for a best-effort attempt to compile a kernel based on what code has changed
 
-## sample jenkins bash script
+## sample github actions bash script
 
 ```
 #!/bin/bash
 
-GIT_COMMIT=${GITHUB_PR_HEAD_SHA}
-GIT_PREVIOUS_COMMIT=HEAD
-
-source ci-testing-tools/jenkins_ci.sh
-
-mkdir -p ${WORKSPACE}/build/userpatches
-cp -f ${WORKSPACE}/ci-testing-tools/config-jenkins-kernel.conf ${WORKSPACE}/build/userpatches/
-
-configure_monorepo_watcher
-generate_test_table
-
-cd build
-get_files_changed
-get_build_target
-
-build_kernel jenkins-kernel
+         cd build
+         GIT_COMMIT=$(echo $GITHUB_SHA)
+         GIT_PREVIOUS_COMMIT=$(git rev-parse origin/$GITHUB_BASE_REF)
+         ARMBIAN_BOARD=tritium-h5
+         ARMBIAN_BRANCH=current
+         cd ..
+         env
+         source ci-testing-tools/jenkins_ci.sh
+         
+         mkdir -p build/userpatches
+         cp -f ci-testing-tools/config-jenkins-kernel.conf build/userpatches/
+         configure_monorepo_watcher
+         generate_board_table
+         load_board_table
+         cd build
+         get_files_changed
+         get_build_target
+         git checkout ${GITHUB_SHA}
+         git branch -v
+         export GPG_TTY=$(tty)
+         build_kernel jenkins-kernel
 ```
 
 ## dependencies
-* https://github.com/slimm609/monorepo-gitwatcher.git
+
 * this repo
 * armbian/build
 

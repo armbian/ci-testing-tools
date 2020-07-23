@@ -66,7 +66,8 @@ translate_family() {
 
 generate_board_table() {  
   config_dir=build/config/boards
-  files=$(ls ${config_dir}/*.conf ${config_dir}/*.wip ${config_dir}/*.csc)
+#  files=$(ls ${config_dir}/*.conf ${config_dir}/*.wip ${config_dir}/*.csc)
+  files=$(ls ${config_dir}/*.conf)
   
   rm -f board_table.csv
   

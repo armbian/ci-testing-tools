@@ -131,7 +131,7 @@ get_build_target() {
          board_score=$current_score
          ARMBIAN_BOARD=${board}
          _info "ARMBIAN_BOARD=${board}"
-         for branch in current dev legacy; do
+         for branch in current edge legacy; do
            if echo $family_row |fgrep -q $branch; then
               _info "ARMBIAN_BRANCH=${branch}"
               ARMBIAN_BRANCH=${branch}
